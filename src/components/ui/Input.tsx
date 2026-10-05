@@ -5,32 +5,42 @@ export interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> 
   label?: string;
   error?: string;
   helperText?: string;
+  leftIcon?: React.ReactNode;
 }
 
 export const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, label, error, helperText, ...props }, ref) => {
+  ({ className, type, label, error, helperText, leftIcon, ...props }, ref) => {
     return (
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col gap-1.5 w-full">
         {label && (
-          <label className="text-sm font-medium text-gray-700">
+          <label className="text-xs font-semibold text-[#252525] dark:text-[#EDE9E1] tracking-wide">
             {label}
+            {props.required && <span className="text-[#9A5C55] ml-1">*</span>}
           </label>
         )}
-        <input
-          type={type}
-          className={cn(
-            "flex h-10 w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-900 shadow-sm transition-colors file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-gray-400 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-50",
-            error && "border-red-500 focus-visible:ring-red-500",
-            className
+        <div className="relative flex items-center">
+          {leftIcon && (
+            <div className="absolute left-3 text-[#66645E] dark:text-[#A6A39A] pointer-events-none">
+              {leftIcon}
+            </div>
           )}
-          ref={ref}
-          {...props}
-        />
+          <input
+            type={type}
+            className={cn(
+              "flex h-9 w-full rounded-md border border-[#D2CEC2] dark:border-[#3C4743] bg-[#FFFDF7] dark:bg-[#232826] px-3 py-2 text-xs text-[#252525] dark:text-[#EDE9E1] transition-colors placeholder:text-[#66645E]/60 dark:placeholder:text-[#A6A39A]/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#365C63] focus-visible:border-[#365C63] disabled:cursor-not-allowed disabled:opacity-50",
+              leftIcon && "pl-9",
+              error && "border-[#9A5C55] focus-visible:ring-[#9A5C55]",
+              className
+            )}
+            ref={ref}
+            {...props}
+          />
+        </div>
         {helperText && !error && (
-          <span className="text-xs text-gray-500">{helperText}</span>
+          <span className="text-[11px] text-[#66645E] dark:text-[#A6A39A]">{helperText}</span>
         )}
         {error && (
-          <span className="text-xs text-red-500">{error}</span>
+          <span className="text-[11px] font-medium text-[#9A5C55]">{error}</span>
         )}
       </div>
     )
